@@ -25,7 +25,7 @@ Each project focuses on real-world use cases and demonstrates industry-standard 
 - Showcase real-world projects on GitHub & CV
 
 ## Tech Stack
-- Java 8+ / Java 17
+- Java 8+ / Java 21
 - Spring Boot
 - Spring Data JPA
 - Spring Security
