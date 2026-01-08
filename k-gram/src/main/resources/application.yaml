@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: k-gram
+  datasource:
+    url: jdbc:h2:mem:testdb # 'testdb' is the database name
+    username: sa            # default username is 'sa'
+    password:               # default password is empty
+    driverClassName: org.h2.Driver
+  h2:
+    console:
+      enabled: true         # enables the H2 web console
+      path: /h2-console     # console will be available at http://localhost:8080/h2-console
+
