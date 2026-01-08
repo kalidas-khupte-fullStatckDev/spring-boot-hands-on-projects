@@ -22,13 +22,16 @@ public class PlatformUser {
     private String name;
     private String userName;
 
-    @ToString.Exclude
     @OneToOne(mappedBy = "platformUser", cascade = CascadeType.ALL)
     private PlatformProfile platformProfile;
 
     public void setPlatformProfile(PlatformProfile platformProfile) {
-        platformProfile.setPlatformUser(this);
-        this.platformProfile = platformProfile;
+        if (this.platformProfile != platformProfile) {
+            this.platformProfile = platformProfile;
+            if (platformProfile.getPlatformUser() != this) {
+                platformProfile.setPlatformUser(this);
+            }
+        }
     }
 
     @OneToMany(mappedBy = "postPlatformUser")

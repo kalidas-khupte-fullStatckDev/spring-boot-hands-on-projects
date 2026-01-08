@@ -19,15 +19,16 @@ public class PlatformProfile {
 
     private String profileAvatar;
 
-    @ToString.Exclude
-    @OneToOne
     @JoinColumn(name = "platform_user")
     @JsonIgnore
     private PlatformUser platformUser;
 
     public void setPlatformUser(PlatformUser platformUser) {
-        if(platformUser.getPlatformProfile() != this){
-            platformUser.setPlatformProfile(this);
+        if (this.platformUser != platformUser) {
+            this.platformUser = platformUser;
+            if (platformUser.getPlatformProfile() != this) {
+                platformUser.setPlatformProfile(this);
+            }
         }
     }
 }
