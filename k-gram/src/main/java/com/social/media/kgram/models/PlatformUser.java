@@ -1,11 +1,9 @@
 package com.social.media.kgram.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.*;
 
@@ -22,17 +20,8 @@ public class PlatformUser {
     private String name;
     private String userName;
 
-    @OneToOne(mappedBy = "platformUser", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "platformUser", cascade = CascadeType.PERSIST)
     private PlatformProfile platformProfile;
-
-    public void setPlatformProfile(PlatformProfile platformProfile) {
-        if (this.platformProfile != platformProfile) {
-            this.platformProfile = platformProfile;
-            if (platformProfile.getPlatformUser() != this) {
-                platformProfile.setPlatformUser(this);
-            }
-        }
-    }
 
     @OneToMany(mappedBy = "postPlatformUser")
     private List<Post> postList = new ArrayList<>();
@@ -46,13 +35,16 @@ public class PlatformUser {
     private Set<PlatformGroup> groups = new HashSet<>();
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof PlatformUser that)) return false;
-        return Objects.equals(id, that.id);
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
+    public void setPlatformProfile(PlatformProfile platformProfile) {
+        if (platformProfile != this.platformProfile) {
+            this.platformProfile = platformProfile;
+            if (!Objects.equals(platformProfile.getPlatformUser(), this)) {
+                platformProfile.setPlatformUser(this);
+            }
+        }
     }
 }

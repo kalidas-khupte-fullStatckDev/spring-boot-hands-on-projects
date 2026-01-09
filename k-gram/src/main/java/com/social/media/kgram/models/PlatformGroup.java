@@ -27,13 +27,7 @@ public class PlatformGroup {
     private Set<PlatformUser> users = new HashSet<>();
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof PlatformGroup that)) return false;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id);
     }
 }

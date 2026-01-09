@@ -26,13 +26,7 @@ public class Post {
     private PlatformUser postPlatformUser;
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Post post)) return false;
-        return Objects.equals(id, post.id);
-    }
-
-    @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id);
     }
 }

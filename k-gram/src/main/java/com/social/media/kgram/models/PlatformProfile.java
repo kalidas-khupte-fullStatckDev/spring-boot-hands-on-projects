@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Data
@@ -19,7 +18,8 @@ public class PlatformProfile {
 
     private String profileAvatar;
 
-    @JoinColumn(name = "platform_user")
+    @OneToOne
+    @JoinColumn(name = "platform_user_id")
     @JsonIgnore
     private PlatformUser platformUser;
 
@@ -31,4 +31,5 @@ public class PlatformProfile {
             }
         }
     }
+
 }

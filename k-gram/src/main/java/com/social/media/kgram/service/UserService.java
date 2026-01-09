@@ -1,5 +1,6 @@
 package com.social.media.kgram.service;
 
+import com.social.media.kgram.models.PlatformProfile;
 import com.social.media.kgram.models.PlatformUser;
 import com.social.media.kgram.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,13 @@ public class UserService {
     }
 
     public PlatformUser addNewUser(PlatformUser platformUser) {
+        if (platformUser.getPlatformProfile() != null) {
+                platformUser.setPlatformProfile(platformUser.getPlatformProfile());
+//            if (platformUser.getPlatformProfile().getPlatformUser() == null) {
+//                platformUser.getPlatformProfile().setPlatformUser(platformUser);
+//            }
+        }
         return userRepository.save(platformUser);
     }
+
 }
