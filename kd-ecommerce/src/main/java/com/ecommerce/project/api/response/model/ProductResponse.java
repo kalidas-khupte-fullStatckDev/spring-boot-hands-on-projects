@@ -1,15 +1,14 @@
 package com.ecommerce.project.api.response.model;
 
-import com.ecommerce.project.model.Category;
+import java.util.List;
+import com.ecommerce.project.dtos.ProductDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductResponse {
-    private Long productId;
-    private String name;
-    private String description;
-    private double price;
-    private double specialPrice;
-    private Integer discount;
-    private Integer quantity;
-    private Category category;
+    private List<ProductDTO> content;
 }
