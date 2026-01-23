@@ -2,6 +2,7 @@ package com.ecommerce.project.exceptions;
 
 import com.ecommerce.project.api.response.model.global.exception.APIResponse;
 import com.ecommerce.project.exceptions.custom.APIException;
+import com.ecommerce.project.exceptions.custom.ResourceAlreadyPresentException;
 import com.ecommerce.project.exceptions.custom.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -33,6 +34,13 @@ public class GlobalExceptionHandler {
         String exMessage = resourceNotFoundException.getMessage();
         APIResponse apiResponse = new APIResponse(exMessage, ResourceNotFoundException.class.toString(), false);
         return new ResponseEntity<>(apiResponse, HttpStatusCode.valueOf(HttpStatus.NOT_FOUND.value()));
+    }
+
+    @ExceptionHandler(ResourceAlreadyPresentException.class)
+    public ResponseEntity<APIResponse> handleResourceAlreadyPresentException(ResourceAlreadyPresentException alreadyPresentException){
+        String exMessage = alreadyPresentException.getMessage();
+        APIResponse apiResponse = new APIResponse(exMessage, ResourceAlreadyPresentException.class.toString(), false);
+        return new ResponseEntity<>(apiResponse, HttpStatusCode.valueOf(HttpStatus.FOUND.value()));
     }
     
     @ExceptionHandler(APIException.class)

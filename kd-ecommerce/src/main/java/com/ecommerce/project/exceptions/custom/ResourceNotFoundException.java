@@ -20,6 +20,4 @@ public class ResourceNotFoundException extends RuntimeException {
         this.fieldName = fieldName;
         this.resourceName = resourceName;
     }
-
-
 }

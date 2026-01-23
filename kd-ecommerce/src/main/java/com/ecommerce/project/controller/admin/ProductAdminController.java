@@ -2,6 +2,7 @@ package com.ecommerce.project.controller.admin;
 
 import com.ecommerce.project.dtos.ProductDTO;
 import com.ecommerce.project.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -11,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-//http://localhost:8080/api/admin/products/category/1/add
 @RestController
 @RequestMapping("api/admin/products/")
 public class ProductAdminController {
@@ -20,12 +20,12 @@ public class ProductAdminController {
     private ProductService productService;
 
     @PostMapping("category/{categoryId}/add")
-    public ResponseEntity<ProductDTO> addProduct( @PathVariable Long categoryId, @RequestBody ProductDTO productDTO) {
+    public ResponseEntity<ProductDTO> addProduct( @PathVariable Long categoryId, @RequestBody @Valid ProductDTO productDTO) {
         return new ResponseEntity<>(productService.addProduct(categoryId, productDTO), HttpStatusCode.valueOf(HttpStatus.CREATED.value()));
     }
 
     @PutMapping("update/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long productId, @RequestBody ProductDTO product) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long productId, @RequestBody @Valid ProductDTO product) {
         return new ResponseEntity<>(productService.updateProduct(productId, product), HttpStatusCode.valueOf(HttpStatus.OK.value()));
     }
 

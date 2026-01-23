@@ -11,10 +11,6 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDTO {
-
-    @Value("eCommerce")
-    private String applicationName;
-
     private Long categoryId;
     private String categoryName;
 }
