@@ -61,7 +61,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     @Override
-    public @Nullable String getPass word() {
+    public @Nullable String getPassword() {
         return password;
     }
 
