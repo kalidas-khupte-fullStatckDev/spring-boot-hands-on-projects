@@ -48,7 +48,8 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers("/h2-console/**").permitAll().requestMatchers("/login").permitAll().anyRequest().authenticated());
+        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                .requestMatchers("/h2-console/**").permitAll().requestMatchers("/login").permitAll().anyRequest().authenticated());
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
             httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(authEntryPointJwt);
@@ -68,7 +69,6 @@ public class SecurityConfig {
     @Bean
     public CommandLineRunner initData(UserDetailsService userDetailsService) {
         return args -> {
-            JdbcUserDetailsManager manager = (JdbcUserDetailsManager) userDetailsService;
             UserDetails user1 = User.withUsername("user1")
                     .password(getPasswordEncoder().encode("password1"))
                     .roles("USER")

@@ -1,4 +1,4 @@
-package com.spring.security.demo.jwt;
+package com.bank.app.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,29 +29,29 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         logger.debug("AuthTokenFilter called for URI: {}", request.getRequestURI());
         try {
-            String jwtToken = parseJWTToken(request);
-            logger.debug("AuthTokenFilter.java: {}", jwtToken);
-            if (jwtToken != null && jwtUtils.validateJwtToken(jwtToken)) {
-                String userName = jwtUtils.getUserNameFromJwtToken(jwtToken);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+            String jwt = jwtUtils.retrieveJWTFromRequest(request);
+
+            if (jwt != null && jwtUtils.validateToken(jwt)) {
+                String username = jwtUtils.getUserNameFromToken(jwt);
+
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
-                );
-                logger.debug("Roles for JWT token : {}", userDetails.getAuthorities());
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities());
+
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (Exception ex) {
-            logger.error("Cannot set user authentication : {}", ex.getMessage());
-
+        } catch (Exception e) {
+            logger.error("Cannot set user authentication: {}", e.getMessage());
         }
-        filterChain.doFilter(request, response);
-    }
 
-    private String parseJWTToken(HttpServletRequest request) {
-        return jwtUtils.getJWTTokenFromRequest(request);
+        filterChain.doFilter(request, response);
     }
 }

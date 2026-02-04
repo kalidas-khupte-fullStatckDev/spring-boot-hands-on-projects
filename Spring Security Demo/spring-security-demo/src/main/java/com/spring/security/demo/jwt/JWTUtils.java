@@ -42,24 +42,24 @@ public class JWTUtils {
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(new Date().getTime() + jwtExpirationTimeInMS))
-                .signWith(getKey(jwtSecretKey)).compact();
+                .signWith(getKey()).compact();
     }
 
     // Parsing Token
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser()
-                .decryptWith((SecretKey) getKey(jwtSecretKey)).build().parseSignedClaims(token).getPayload().getSubject();
+                .verifyWith((SecretKey) getKey()).build().parseSignedClaims(token).getPayload().getSubject();
     }
 
     // Getting Key
-    Key getKey(String jwtSecretKey) {
+    Key getKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecretKey));
     }
 
     public boolean validateJwtToken(String authToken){
         try {
             System.out.println("Validating Starts:");
-            Jwts.parser().verifyWith((SecretKey) getKey(jwtSecretKey)).build().parseSignedClaims(authToken);
+            Jwts.parser().verifyWith((SecretKey) getKey()).build().parseSignedClaims(authToken);
             System.out.println("Validated Successful");
             return true;
         } catch (MalformedJwtException e) {

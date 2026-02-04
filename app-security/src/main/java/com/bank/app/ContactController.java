@@ -1,22 +1,25 @@
 package com.bank.app;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
-@RequestMapping("/contacts")
+@RequestMapping("/contacts/")
 public class ContactController {
 
-    @GetMapping
+    @GetMapping("/get-all")
     public String getContacts() {
         return "Returning all contacts";
     }
 
-    @PostMapping
+   // @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/add")
     public String addContact() {
         return "New contact added!";
     }
 
-    @DeleteMapping("/{id}")
+   // @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/delete/{id}")
     public String deleteContact(@PathVariable int id) {
         return "Contact " + id + " deleted!";
     }
