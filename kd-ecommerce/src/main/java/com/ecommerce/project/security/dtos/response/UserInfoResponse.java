@@ -1,4 +1,4 @@
-package com.ecommerce.project.dtos;
+package com.ecommerce.project.security.dtos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class LoginResponse {
+public class UserInfoResponse {
+    private Long id;
     private String jwtTokenValue;
     private Integer statusCode;
     private String userName;

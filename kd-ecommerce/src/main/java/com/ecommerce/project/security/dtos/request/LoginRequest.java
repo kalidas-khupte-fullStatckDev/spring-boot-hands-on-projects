@@ -1,5 +1,6 @@
-package com.ecommerce.project.dtos;
+package com.ecommerce.project.security.dtos.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginRequest {
+
+    @NotBlank
     private String userName;
+
+    @NotBlank
     private String password;
 }

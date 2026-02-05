@@ -2,8 +2,6 @@ package com.ecommerce.project.model;
 
 import com.ecommerce.project.model.enums.AppRole;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,11 +19,10 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
-    private Integer roleId;
+    private Long roleId;
 
     @ToString.Exclude
-    @NotEmpty
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_name", length = 20)
+   @Column(name = "role_name", length = 20)
     private AppRole roleName;
 }
