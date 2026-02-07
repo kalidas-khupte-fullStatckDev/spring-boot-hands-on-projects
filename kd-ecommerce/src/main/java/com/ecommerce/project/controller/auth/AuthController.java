@@ -16,9 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,10 +24,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -74,16 +69,22 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         assert userDetails != null;
-        String jwtToken = jwtUtils.generateJWTToken(userDetails);
+        ResponseCookie jwtCookie = jwtUtils.generateJWTCookies(userDetails);
         UserInfoResponse response = new UserInfoResponse();
         List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         response.setId(userDetails.getId());
-        response.setJwtTokenValue(jwtToken);
         response.setUserName(userDetails.getUsername());
         response.setRoles(roles);
         response.setStatusCode(HttpServletResponse.SC_ACCEPTED);
         response.setAuthenticated(true);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).body(response);
+    }
+
+    @GetMapping("sign-out")
+    public ResponseEntity<?> signOut(Authentication authentication) {
+        //authentication.setAuthenticated(false);
+        ResponseCookie clearedCookie = jwtUtils.getCleanJWTCookies();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, clearedCookie.toString()).body(new MessageResponse("User has been logged out"));
     }
 
     @PostMapping("signup")
@@ -131,10 +132,34 @@ public class AuthController {
             });
         }
         user.setUserRole(jpaRoles);
-
         userRepository.save(user);
-        return new ResponseEntity<>( new MessageResponse("New User Registration is successful!!"), HttpStatusCode.valueOf(HttpStatus.CREATED.value()));
+        return new ResponseEntity<>(new MessageResponse("New User Registration is successful!!"), HttpStatusCode.valueOf(HttpStatus.CREATED.value()));
+    }
 
+    @GetMapping("getLoggedInUserName")
+    public ResponseEntity<?> getCurrentLoggedInUserName(Authentication authentication) {
+        if (authentication != null)
+            return ResponseEntity.ok(authentication.getName());
+        else
+            return ResponseEntity.ok(new MessageResponse("No current logged in User"));
+    }
+
+    @GetMapping("getLoggedInUserDetails")
+    public ResponseEntity<?> getCurrentLoggedInUserDetails(Authentication authentication) {
+        if (authentication != null) {
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+            assert userDetails != null;
+            UserInfoResponse response = new UserInfoResponse();
+            List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+            response.setId(userDetails.getId());
+            response.setUserName(userDetails.getUsername());
+            response.setRoles(roles);
+            response.setStatusCode(HttpServletResponse.SC_ACCEPTED);
+            response.setAuthenticated(true);
+            return ResponseEntity.ok().body(response);
+        } else
+            return ResponseEntity.ok(new MessageResponse("No current logged in User"));
     }
 }
 

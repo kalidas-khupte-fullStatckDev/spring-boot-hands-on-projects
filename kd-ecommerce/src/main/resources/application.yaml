@@ -17,5 +17,7 @@ spring:
   app:
     jwtSecret : mySecretKey123912738aopsgjnspkmndfsopkvajoirjg94gf2opfng2moknm
     jwtExpirationMs : 300000000000
+    jwt:
+      cookieName: kdEcomJwtCookie
 project:
   image: uploads/
